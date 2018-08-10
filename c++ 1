@@ -1,0 +1,251 @@
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+//NAME: HAZEM ABDEL AZIZ
+
+//Question 1:
+//	We can't return the array itself, however we can return a pointer that points at the array by pointing at the first element of the array
+//	Hence we can have a function that changes an array, and returns a pointer to that array
+
+const int rows = 5;
+const int cols = 5;
+
+//Question 2:
+//tried using srand() here but it kept returning a matrix with all elements the same number
+void fillMatrix(int matrix[rows][cols])
+{
+	//fill in the matrix with random numbers
+	for(int i=0; i<rows; ++i){
+		for(int j=0; j<cols; ++j){
+			//made it choose random numbers between 0 and 100
+			matrix[i][j] = rand()%100;
+		}
+	}
+}
+
+//Question 3:
+void printMatrix(int matrix[rows][cols])
+{
+	//print the matrix by printing each row and column
+	for(int i=0; i<rows; ++i){
+		for(int j=0; j<cols; ++j){
+			cout<< matrix[i][j];
+			cout<< " ";
+		}
+		cout<< '\n'<<endl;
+	}		
+}
+
+//Question 4:
+void transposeMatrix(int matrix[rows][cols])
+{
+	//create a transpose matrix that is the transpose of the input matrix
+	//and fill in the contenst such that the row of the input is the column of the tranpose
+	// and the column of the input is the row of the transpose
+	int transpose[cols][rows];
+	for(int i=0; i<rows; ++i){
+		for(int j=0; j<cols; ++j){
+			transpose[j][i] = matrix[i][j];
+		}
+	}
+	//changing the contents of matrix to be like it's transpose
+	for(int i=0; i< rows; ++i){
+		for(int j=0; j<cols; j++){
+			matrix[i][j] = transpose[i][j];
+		}
+	}
+}
+
+
+//Question 5:
+//the normal O(n^3) method of finding the multiplication of 2 matrices using 3 loops
+//the i,j element of the resulting matrix is equal to the sum of the elementwise multiplication of the ith row of the first matrix
+// and the jth column of the second (if that makes sense at all.)
+void multiplyMatrices(int matrix1[rows][cols], int matrix2[rows][cols], int mult[rows][cols])
+{
+	for(int i = 0; i < rows; ++i){
+        for(int j = 0; j < cols; ++j){	
+            for(int k = 0; k < cols; ++k){
+                mult[i][j] += matrix1[i][k] * matrix2[k][j];
+            }
+		}
+	}
+}
+
+//Question 6:
+//a recursive algorithm.
+//at first, to finds the solution for mult[i][j] by only changing k
+//then it says k to zero and starts to change the j, and repeats by changing the k
+//then it sets j and k to zero, and start to change i
+void multiplyMatricesRec(int matrix1[rows][cols], int matrix2[rows][cols], int mult[rows][cols])
+{
+	static int i=0, j=0, k=0;
+	if(i< rows){
+		if(j<cols){
+			if(k<cols){
+				
+				mult[i][j] += matrix1[i][k] * matrix2[k][j];
+        	 	k++;
+				multiplyMatricesRec(matrix1, matrix2, mult);
+      		}
+      		j++;
+      		k=0;
+      		multiplyMatricesRec(matrix1, matrix2, mult);
+    	}
+    	i++;
+    	j=0;
+    	multiplyMatricesRec(matrix1, matrix2, mult);
+	}	
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//Question 7
+//fillMatrix using pointers
+void fillMatrix2(int **ptr)
+{
+	//fill in the matrix with random numbers
+	for(int i=0; i<rows; ++i){
+		for(int j=0; j<cols; ++j){
+			//made it choose random numbers between 0 and 100
+			*(*(ptr+i)+j) = rand()%100;
+		}
+	}
+}
+
+//print method using pointers
+void printMatrix2(int **ptr)
+{	
+	//print the matrix by printing each row and column
+	for(int i=0; i<rows; ++i){
+		for(int j=0; j<cols; ++j){
+			cout<< *(*(ptr+i)+j);
+			cout<< " ";
+		}
+		cout<< '\n'<<endl;
+	}		
+}
+
+
+void transposeMatrix2(int **ptr)
+{
+	//create a transpose matrix that is the transpose of the input matrix
+	//and fill in the contenst such that the row of the input is the column of the tranpose
+	// and the column of the input is the row of the transpose
+	int transpose[cols][rows];
+	for(int i=0; i<rows; ++i){
+		for(int j=0; j<cols; ++j){
+			*(*(transpose+j)+i) = *(*(ptr+i)+j);
+		}
+	}
+	//changing the contents of matrix to be like it's transpose
+	for(int i=0; i< rows; ++i){
+		for(int j=0; j<cols; j++){
+			*(*(ptr+i)+j) = *(*(transpose+i)+j);
+		}
+	}
+}
+
+//Question 8
+//Yes we can represent a 2D array as 1D if we take care of the indexing properly
+//skip a line every 5th element
+//add an extra space when an element is 1 digit
+//Here I'll show you
+
+//Create a 1D array, and put the random numbers in it
+void fillMatrix3(int matrix[rows*cols]){
+	for(int i=0; i< rows*cols; i++){
+		matrix[i] = rand() % 100;
+	}
+}
+
+
+//print the 1D array as a 2D
+void printMatrix3(int matrix[rows*cols]){
+	for(int i=0; i< rows*cols; i++){
+		if(i!=0 && i%rows == 0)	cout<<"\n\n";
+		
+		if(matrix[i]/10==0){
+			cout<<" ";
+		}
+		cout<< matrix[i];
+		cout<< " ";
+	}
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//MAIN METHOD
+
+int main(){
+	//initializing all matrices used
+	int matrix[rows][cols];
+	int matrix2[rows][cols]; //used for matrix multiplication
+	
+	int mult[rows][cols] = {0};// ^
+	int mult2[rows][cols] = {0};// ^^ but the recursive one
+	
+	
+	//question 2 test
+	fillMatrix(matrix);
+	fillMatrix(matrix2);
+	
+	cout<< "OG MATRIX WITH RANDOM VALUES" << endl;
+	
+	//question 3 test
+	printMatrix(matrix);
+	
+	cout<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout<<"TRANSPOSE:"<<endl;
+	
+	
+	//question 4 test
+	transposeMatrix(matrix);
+	printMatrix(matrix);
+	
+	//question 5 test
+	multiplyMatrices(matrix, matrix2, mult);
+	
+	cout<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout<<"QUESTION 5:"<<endl;
+	cout<< "Matrix 1:" << endl;
+	printMatrix(matrix);
+	cout<<"Matrix 2:"<<endl;
+	printMatrix(matrix2);
+	cout<<"Result:"<<endl;
+	printMatrix(mult);
+	
+	//question 6 test
+	multiplyMatricesRec(matrix, matrix2, mult2);
+	cout<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout<< "USING RECURSION" << endl;
+	printMatrix(mult2);
+	
+	//question 7
+	int matrix3[rows][cols];
+	cout<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+	cout<< "Question 7" << endl;
+	
+	
+	//initializing the pointer used
+	int **dPtr; 
+	int *row[5];
+	dPtr = (int **)row; 
+	for (int i = 0; i < rows; i++){
+		row[i] = (int *)matrix3 + cols*i;
+	}
+
+	//trying out fillMatrix, printMatrix and Transpose
+	fillMatrix2(dPtr);
+	printMatrix2(dPtr);
+	transposeMatrix2(dPtr);
+	cout<<"TRANSPOSE:"<<endl;
+	printMatrix2(dPtr);
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//question 8
+	cout<< "QUESTION 8:" << endl;
+	int matrix4[rows*cols];
+	fillMatrix3(matrix4);
+	printMatrix3(matrix4);
+
+	return 0;
+}
