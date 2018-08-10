@@ -1,0 +1,184 @@
+//File name: PinTest
+//Developers: Hazem Abdel Aziz,
+//Purpose: Testing the methods in Pin.java
+//Inputs:
+//Outputs:
+//Modification: changes the old pin number to the new pin number
+//=====================================================================================================================
+//H.A. 21/01/2018. Testing the methods in Pin.java
+
+public class PinTest{
+  public static void main(String[] args){
+    //Use the array to store values of pin. Will use the set and get methods to change the values of the pins and retreive them
+    Pin[][] pinsToTest= new Pin[10][10];
+    System.out.println("Valid test cases for the method setPin(String) and the method getPin() : ");
+    System.out.println("Arguments: ");
+    for(int i=0; i<10; i++){
+      for(int j=0; j<10; j++){
+        //initialize the pins of the array
+        pinsToTest[i][j] = new Pin();
+        //using the set method and printing the arguments
+        pinsToTest[i][j].setPin(i + "" + j); 
+        System.out.print(i + "" + j + " ");
+      }
+    }
+    System.out.println();
+    System.out.println("Result: ");
+    for(int i=0; i<10; i++){
+      for(int j=0; j<10; j++){
+        //using the get methods and printing the results
+        System.out.print(pinsToTest[i][j].getPin() + " ");
+      }
+    }
+    System.out.println();
+    
+    System.out.println("===============================================================================================");
+    //Testing for isValid(). Using valid tests here and making sure it returns true
+    //the arguments used are all integers from 00 to 99
+    System.out.println("Valid test cases for isValid() : ");
+    System.out.println("Arguments: ");
+    for(int i=0; i<10; i++){
+      for(int j=0; j<10; j++){
+        System.out.print(i + "" + j + " ");
+      }
+    }
+    System.out.println();
+    //using the isValid method and printing the results, making sure it prints "true" as expected
+    System.out.println("Result: ");
+    for(int i=0; i<10; i++){
+      for(int j=0; j<10; j++){
+        System.out.print(Pin.isValid(i + "" + j) + " ");
+      }
+    }
+    System.out.println();
+    
+    System.out.println("===============================================================================================");
+    //Testing for isValid(). Using invalid tests here and making sure it returns fakse
+    //the arguments used are all one digit integers
+    System.out.println("Invalid test cases for isValid() with 1 digits: ");
+    System.out.println("Arguments: ");
+    for(int i=0; i<10; i++){
+      System.out.print(i + " ");
+    }
+    System.out.println();
+    //using the isValid method and making sure it prints false.
+    System.out.println("Result: ");
+    for(int i=0; i<10; i++){
+      System.out.print(Pin.isValid(i+"") + " ");
+    }
+    System.out.println();
+    
+    
+    System.out.println("===============================================================================================");
+    //Testing for isValid(). Using invalid tests here and making sure it returns false
+    //the arguments used are all nonintegers (chose ascii values 30 to 47)
+    System.out.println("Invalid test cases for isValid() with 2 non digits: ");
+    System.out.println("Arguments: ");
+    for(int i=30; i<48; i++){
+      for(int j=30; j<48; j++){
+        System.out.print((char)i + "" + (char)j + " ");
+      }
+    }
+    System.out.println();
+    //using isValid here and making sure the result prints false as expected
+    System.out.println("Result: ");
+    for(int i=30; i<48; i++){
+      for(int j=30; j<48; j++){
+        System.out.print(Pin.isValid((char)i + "" + (char)j) + " ");
+      }
+    }
+    System.out.println();
+    
+    System.out.println("===============================================================================================");
+    //Testing for isValid(). Using invalid tests here and making sure it returns false
+    //the arguments used have one digit and one nondigit
+    System.out.println("Invalid test cases for isValid() with 1 non digits: ");
+    System.out.println("Arguments: ");
+    for(int i=30; i<48; i++){
+      for(int j=49; j<58; j++){
+        System.out.print((char)i + "" + (char)j + " ");
+      }
+    }
+    System.out.println();
+    //printing the results of this isValid() and making sure its false
+    System.out.println("Result: ");
+    for(int i=30; i<48; i++){
+      for(int j=49; j<58; j++){
+        System.out.print(Pin.isValid((char)i + "" + (char)j) + " ");
+      }
+    }
+    System.out.println();
+    
+    System.out.println("===============================================================================================");
+    //Testing for isValid(). Using invalid tests here and making sure it returns false
+    //the arguments used are 3 digit integers
+    System.out.println("Invalid test cases for isValid() with 3 digits: ");
+    System.out.println("Arguments: ");
+    for(int i=0; i<7; i++){
+      for(int j=0; j<7; j++){
+        for(int k=0; k<7; k++){
+          System.out.print(i + "" + j + ""+k+" ");
+        }
+      }
+    }
+    System.out.println();
+    //Printing the result of the isValid() and making sure it's false as expected
+    System.out.println("Result: ");
+    for(int i=0; i<7; i++){
+      for(int j=0; j<7; j++){
+        for(int k=0; k<7; k++){
+          System.out.print(Pin.isValid(i + "" + j + "" +k) + " ");
+        }
+      }
+    }
+    System.out.println();
+    
+    System.out.println("===============================================================================================");
+    //Testing for checkIfSame(). Using valid test cases.
+    //Creating pins with the same PIN_NUMBER, and comparing them
+    System.out.println("Valid test cases for checkIfSame(): ");
+    Pin pin1 = new Pin();
+    Pin pin2 = new Pin();
+    System.out.println("Arguments: ");
+    for(int i=0; i<10; i++){
+      for(int j=0; j<10; j++){
+        System.out.print(i + "" + j + " ");
+      }
+    }
+    System.out.println();
+    //printing the result of the checkIfSame method, and making sure the results are all true
+    System.out.println("Result: ");
+    for(int i=0; i<10; i++){
+      for(int j=0; j<10; j++){
+        pin1.setPin(i + "" + j);
+        pin2.setPin(i + "" + j);
+        System.out.print(Pin.checkIfSame(pin1, pin2) + " ");
+      }
+    }
+    System.out.println();
+    
+    System.out.println("===============================================================================================");
+    //Testing for checkIfSame(). Using invalid test cases.
+    //Creating pins with the different PIN_NUMBER, and comparing them
+    System.out.println("Invalid test cases for checkIfSame(): ");
+    System.out.println("Arguments: ");
+    for(int i=0; i<10; i++){
+      for(int j=0; j<10; j++){
+        System.out.print(i + "" + j + " with " + (i+1) +"" + (j+1) + ", ");
+      }
+    }
+    System.out.println();
+    //printing the result of the checkIfSame method, and making sure the results are all false
+    System.out.println("Result: ");
+    for(int i=0; i<10; i++){
+      for(int j=0; j<10; j++){
+        pin1.setPin(i + "" + j );
+        pin2.setPin(i+1 + "" + j+1);
+        System.out.print(Pin.checkIfSame(pin1, pin2) + " ");
+      }
+    }
+    System.out.println();
+    
+    
+  }
+}
