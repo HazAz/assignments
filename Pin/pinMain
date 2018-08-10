@@ -1,0 +1,105 @@
+//File name: PinMain
+//Developers: Hazem Abdel Aziz
+//Purpose:Contains the main method of the program that changes the 2 digit pin number of someone.
+//Inputs: Old pin number, new pin number
+//Outputs:
+//Modification: changes the old pin number to the new pin number
+//=====================================================================================================================
+//H.A. 21/01/2018. Changes the 2 digit pin number
+
+
+
+//Imported Scanner to get the input from the user
+import java.util.Scanner;
+
+public class PinMain{
+  public static void main(String args[]){
+    //set the initial pin to "00"
+    Pin currentPin = new Pin();
+    
+    //initialize the Scanner
+    Scanner input = new Scanner(System.in);
+    
+    System.out.println("Welcome to pin update!");
+    
+    //Initializing those booleans to false. isOldPinConfirmed will be used in the loop to check if the old pin is confirmed or not.
+    //isNewPinSet will be used later to confirm the setting of the new pin
+    boolean isOldPinConfirmed = false, isNewPinSet = false;
+    
+    //Will set possiblePin to a valid Pin to confirm if it's the same as the old pin
+    Pin possiblePin = new Pin();
+    
+    //A string that will represent the input of the user
+    String trial;
+    
+    //will loop until the old pin is confirmed. When the old pin is confirmed, isOldPinConfirmed is set to true, and the loop terminates.
+    while(!isOldPinConfirmed){
+      
+      //asking the user to input their old pin to confirm it
+      System.out.println("Please input your old pin: ");
+      
+      //handling the users input, and checking if it's valid
+      trial = input.next();
+      
+      //check if the pin is valid (2 digit number).
+      if(Pin.isValid(trial)){
+        
+        //if it's valid, create a new pin with that that number and check if it is the same as the old pin
+        possiblePin.setPin(trial);
+        
+        //if they are the same, print the old pin is confirmed and change isOldPinConfirmed to true to terminate the loop
+        if(Pin.checkIfSame(possiblePin, currentPin)){
+          System.out.println("Old Pin Confirmed");
+          isOldPinConfirmed = true;
+        }
+        else{
+          //if the pins are not the same, print a message and repeat the loop
+          System.out.println("That is not your old pin.");
+        }
+        
+      }
+      //if the input is not a valid pin, print a message and repeat the loop
+      else{
+        System.out.println("That is not your old pin.");
+      }
+    }
+    
+    //By now, the old pin is confirmed, now we want to set up a new pin
+    
+    //trial2 will be like trial above. It will be used to pass the input string
+    String trial2;
+    Pin possibleNewPin = new Pin();
+    
+    //while new pin is not set, we ask for an input and assign it to trial2
+    while(!isNewPinSet){
+      System.out.println("Enter new pin: ");
+      input = new Scanner(System.in);
+      trial2 = input.next();
+      
+      //if the input is valid (2 digit number) check if it's the same as the current pin
+      if(Pin.isValid(trial2)){
+        possibleNewPin.setPin(trial2);
+        
+        //if the input is different than the current pin, then change the pin and set isNewPinSet to true to terminate loop
+        if(!Pin.checkIfSame(possibleNewPin, currentPin)){
+          System.out.println("New Pin Confirmed");
+          isNewPinSet = true;
+          currentPin = possibleNewPin;
+        }
+        //if the input is the same as the current pin, then print an error message and repeat the loop
+        else{
+          System.out.println("Invalid pin.");
+        }
+        
+      }
+      //if the input is invalid, then print an error message and repeat the loop
+      else{
+        System.out.println("Invalid pin."); 
+      }
+      
+    }
+    
+    //Print the new pin
+    System.out.println("Your pin has been updated to " + currentPin.getPin());
+  }
+}
