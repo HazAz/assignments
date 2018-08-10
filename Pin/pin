@@ -1,0 +1,80 @@
+//File name: PinMain
+//Developers: Hazem Abdel Aziz,
+//Class of the Pin object.
+//Inputs:
+//Outputs:
+//Modification:
+//=====================================================================================================================
+//H.A. 21/01/2018. A class of the Pin Object
+
+public class Pin{
+  //Saved the pin as a string called PIN_NUMBER
+  private String PIN_NUMBER;
+  
+  //Constructor that is used to create or edit a pin.
+  //Takes no input, and it creates a new pin with PIN_NUMBER 00
+  //doesn't return anything.
+  public Pin(){
+    this.PIN_NUMBER = "00"; 
+  }
+  
+  
+  /**
+   *This method (getPin) will get the current PIN_NUMBER 
+   * 
+   * @param
+   * @return 
+   */
+  public String getPin(){
+    return this.PIN_NUMBER; 
+  }
+  
+  //A set method which takes a string as input, and it sets the PIN_NUMBER to the string
+  //it doesnt return anything.
+  public void setPin(String pin){
+    this.PIN_NUMBER = pin;
+  }
+  
+  // NAME: isValid
+  // DEVELOPER: Hazem Abdel Aziz, 260661010
+  // PURPOSE: Checks if the possiblePin is a valid pin. A valid pin is a 2 digit number.
+  // INPUTS: a String called possiblePin
+  // OUTPUT: returns true if possiblePin is a valid pin, and false otherwise.
+  // SIDE EFFECTS:
+  // NOTES: 
+  public static boolean isValid(String possiblePin){
+    
+    //if possiblePin does not have a length of 2, then it's not valid
+    if(possiblePin.length()!=2){
+      return false; 
+    }
+    
+    //if it's length is 2, name the first character firstChar and the second character secondChar
+    char firstChar = possiblePin.charAt(0);
+    char secondChar = possiblePin.charAt(1);
+    
+    //Checks the ASCII values of the first and second characters
+    //if their ASCII values correspond to numbers, return true
+    //if not, return false
+    if((int) firstChar<58 && (int) firstChar > 47 && (int) secondChar<58 && (int) secondChar > 47){ 
+      return true;
+    }
+    return false;
+  }
+  
+  // NAME: checkIfSame
+  // DEVELOPER: Hazem Abdel Aziz, 260661010
+  // PURPOSE: Checks if the two input pins have the same PIN_NUMBER.
+  // INPUTS: two Pins we want to compare
+  // OUTPUT: returns true if both pins have the same PIN_NUMBER, and false if they are not the same
+  // SIDE EFFECTS:
+  // NOTES: 
+  public static boolean checkIfSame(Pin currentPin, Pin inputPin){
+    if(currentPin.PIN_NUMBER.equals(inputPin.PIN_NUMBER)){
+      return true; 
+    }
+    return false;
+  }
+  
+  
+}
