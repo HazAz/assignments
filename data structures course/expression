@@ -1,0 +1,140 @@
+import java.io.*;
+import java.util.*;
+
+public class Expression {
+  static String delimiters="+-*%()";
+  
+  
+  // Returns the value of the arithmetic Expression described by expr
+  // Throws an exception if the Expression is malformed
+  static Integer evaluate(String expr) throws Exception {
+    /* The code below gives you an example of utilization of the
+     * StringTokenizer class to break the Expression string into
+     * its components */
+    StringTokenizer st = new StringTokenizer( expr , delimiters , true );    
+    
+    //create 2 stacks
+    Stack <Integer> numbers = new Stack<Integer>();
+    Stack <String > operations = new Stack<String>();
+    
+    //take the elements and put them in an array
+    String array[] = new String[st.countTokens()];
+    for(int i=0; i < array.length; i++){
+      String element = st.nextToken();
+      array[i] = element;
+      if(i!=0 && array[i].equals("(") && !delimiters.contains(array[i-1])){
+        throw new Exception();
+      }
+      
+      if(i!=0 && array[i].equals(")") && array[i-1].equals("(")){
+             throw new Exception();
+      }
+      
+    }    
+    //System.out.println(Arrays.toString(array));
+                         
+    for (int j = array.length-1; j>=0; j--){
+      //System.out.println("j is " + j);
+     // System.out.println("array[j] is " + array[j]);
+      
+      
+      if (delimiters.contains(array[j])){
+        operations.push(array[j]);
+        
+        //once we see (, we keep poping and solving until we find )
+        if (array[j].equals("(")){
+          operations.pop(); //to get rid of (
+          
+          while(!operations.peek().equals(")")){
+            String op = operations.pop(); //get the last operation
+            
+           // System.out.println("element poped is " + op);
+            
+            int n1 = (int) numbers.pop();
+            
+           // System.out.println("n1 poped is " + n1);
+            
+            int n2 = (int) numbers.pop();
+            
+          //  System.out.println("n2 poped is " + n2);
+            
+            if (op.equals("*")){
+              numbers.push((Integer) (n1*n2));
+             // System.out.println(n1 + "*" + n2 + " = " + n1*n2);
+             // System.out.println("peek int stack is " + numbers.peek());
+            }
+            if (op.equals("%")){
+              numbers.push((Integer) (n1/n2));
+            //  System.out.println(n1 + "%" + n2 + " = " + n1/n2);
+             // System.out.println("peek int stack is " + numbers.peek());
+            }
+            if (op.equals("-")){
+              numbers.push((Integer) (n1-n2));
+            //  System.out.println(n1 + "-" + n2 + " = " + (n1 - n2));
+            //  System.out.println("peek int stack is " + numbers.peek());
+            }
+            if (op.equals("+")){
+              numbers.push((Integer) (n1+n2));
+            //  System.out.println(n1 + "+" + n2 + " = "+ (n1+n2));
+             // System.out.println("peek int stack is " + numbers.peek());
+            }   
+          }
+          
+          String s = operations.pop(); //to get rid of )
+          //System.out.println("s poped is " + s);
+        }
+      }
+      
+      else{
+        numbers.push(Integer.valueOf(array[j]));
+        //System.out.println("peek int stack is " + numbers.peek());
+      }
+      
+    }
+    
+    //After the loop is done, finish all the operations
+    
+    while(!operations.isEmpty()){
+      String op = operations.pop(); //get the last operation
+      
+      int n1 = (int) numbers.pop();
+      int n2 = (int) numbers.pop();
+      if (op.equals("*")){
+        numbers.push((Integer) (n1*n2));
+       // System.out.println(n1 + "*" + n2 + " = " + n1*n2);
+      }
+      if (op.equals("%")){
+        numbers.push((Integer) (n1/n2));
+       // System.out.println(n1 + "%" + n2 + " = " + n1/n2);
+      }
+      if (op.equals("-")){
+        numbers.push((Integer) (n1-n2));
+       // System.out.println(n1 + "-" + n2 + " = " + (n1 - n2));
+      }
+      if (op.equals("+")){
+        numbers.push((Integer) (n1+n2));
+       // System.out.println(n1 + "+" + n2 + " = " + (n1+n2));
+      }
+    }
+      // change this
+      return (int) numbers.pop();
+    } 
+    
+    public static void main(String args[]) throws Exception {
+      String line;
+      BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+      
+      do {
+        line=stdin.readLine();
+        if (line.length()>0) {
+          try {
+            Integer x=evaluate(line);
+            System.out.println(" = " + x);
+          }
+          catch (Exception e) {
+            System.out.println("Malformed Expression: "+e);
+          }
+        }
+      } while (line.length()>0);
+    }
+  }
