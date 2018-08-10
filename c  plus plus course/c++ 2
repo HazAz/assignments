@@ -1,0 +1,448 @@
+//Hazem Abdel Aziz
+
+
+#include <iostream>
+#include <stdio.h>
+using namespace std;
+
+//Question 1
+//Node class with a constructor, a default constructor and a destructor
+class Node {
+public:
+    int data;
+    Node *nextNode;
+    Node *previousNode;
+    //constructor
+    Node(int d, Node* next, Node* previous){
+    	this -> data = d;
+        this -> nextNode = next;
+        this -> previousNode = previous;
+    }
+    //default constructor
+    Node(){
+        this -> nextNode = NULL;
+        this -> previousNode = NULL;
+    }
+    //destructor
+    ~Node(){
+    }
+};
+
+//Question 2
+//Class for DLLStructure
+class DLLStructure
+{
+public:
+	DLLStructure();
+	DLLStructure(int array[], int size);
+	~DLLStructure();
+	void PrintDLL();
+	void InsertAfter(int valueToInsertAfter, int valueToBeInserted);
+	void InsertBefore(int valueToInsertBefore, int valueToBeInserted);
+	void Delete(int value);
+	void Sort();
+	bool IsEmpty();
+	int GetHead();
+	int GetTail();
+	int GetSize();
+	int GetMax();
+	int GetMin();
+	DLLStructure(DLLStructure& dlls);
+
+private:
+	Node* first;
+	Node* last;		
+};
+//default constructor
+DLLStructure::DLLStructure()
+{
+	this -> first = NULL;
+    this -> last = NULL;
+}
+
+//customized constructor
+DLLStructure::DLLStructure(int a[], int size)
+{
+	//cout<<"Begin constructor" << endl;
+	//let the first element of the array be a node, and set it to first
+	this -> first = new Node(a[0], NULL, NULL);
+    Node *current = first;
+    
+    
+    //if there's only 1 element in the array
+    if(size == 1)
+    {
+    	this ->last = first;
+	}
+	//if the size is more than 1
+	else
+	{
+    	for(int i=0; i<size; ++i){
+    		//if i is the last element, we make it the last node and set nextNode to null
+    		if(i == size-1){
+    			this -> last        = current;
+            	current -> nextNode = NULL;
+        	}
+        	//if it's not the last node, set the next node
+        	else{
+        		(current -> nextNode) = new Node(a[i+1], NULL, current);
+        		current = (current -> nextNode);
+			}
+    	}
+	}
+	//cout << "Constructor end" << endl;
+}
+
+DLLStructure::~DLLStructure()
+{
+	//cout << "Begin destructor" << endl;
+	Node *n = this->first;
+	//cout<< n->data << endl;
+	Node *cur = NULL;
+	 while(n)
+    {
+        cur = n;
+        n=n->nextNode;
+        //if(n!=NULL){
+        //	cout << n->data << endl;
+		//}
+        delete(cur);
+    }
+
+    first = NULL;	
+	last = NULL;
+	//cout<< "End destructor" <<endl;
+}
+
+//Question 3
+//going through and printing the values of the nodes
+void DLLStructure ::PrintDLL()
+{
+	//cout<< "Begin print" << endl;
+	Node *current = (this->first);
+        while(current!=NULL)
+		{
+			Node *temp = current;
+        	current = (current -> nextNode);
+        	cout << temp->data << " ";
+        	//current = (current -> nextNode);
+		}
+        //cout << "end Print"<< endl;
+}
+
+//Question 4, insertAfter
+//searches for the value to insert after, and then creates the required node and inserts it in right place
+void DLLStructure ::InsertAfter( int valueToInsertAfter, int valueToBeInserted)
+{
+	//cout <<"Begin insertAfter"<<endl;
+	Node *insert = new Node(valueToBeInserted, NULL, NULL);
+    Node *node = this->first;
+    while(node!=NULL)
+    {
+    	if(node -> data == valueToInsertAfter)
+    	{
+    		break;
+		}
+		node = node -> nextNode;
+	}
+	//cout<<"after while"<<endl;
+    if(node == NULL)
+	{
+		cout<< "Value not found" << endl;
+		return;
+	}
+	//cout<<"after if" <<endl;
+	//edit all the next and previous nodes required
+	
+	
+	insert->nextNode = node->nextNode;
+	if(node != last)
+	{
+		(node->nextNode)->previousNode = insert;
+	}
+
+	
+	insert->previousNode = node;
+	
+	node->nextNode = insert;	
+	
+	//cout<< "End insertAfter" <<endl;
+	//if we added the node after the last node, then we must update the last node
+	if(node == last)
+	{
+		last = node->nextNode;
+	}
+}
+
+//Question 5
+//here we find the value to insert before, go to the node before it (if it exists) and call insertAfter
+void DLLStructure ::InsertBefore( int valueToInsertBefore, int valueToBeInserted)
+{
+	Node *insert = new Node(valueToBeInserted, NULL, NULL);
+    Node *node = this->first;
+    while(node!=NULL)
+    {
+    	if(node -> data == valueToInsertBefore)
+    	{
+    		break;
+		}
+		node = node -> nextNode;
+	}
+	//if node doesnt exist
+	if(node == NULL)
+	{
+		cout<< "Value not found" << endl;
+		return;
+	}
+	if(node != first)
+	{
+		node = node -> previousNode;
+		InsertAfter((node->data), valueToBeInserted);
+	}
+	//if node is first element
+	else{
+		first = insert;
+		insert->previousNode = NULL;
+		insert->nextNode = node;
+		node->previousNode = insert;
+	}
+	
+	//if we insert something before the first node, then we must update the first node.
+}
+
+//Question 6
+//loops through, finds the value and deletes it
+void DLLStructure ::Delete(int value)
+{
+	Node *node = this->first;
+    while(node!=NULL)
+    {
+    	if(node -> data == value)
+    	{
+    		break;
+		}
+		node = node -> nextNode;
+	}
+	if(node == NULL)
+	{
+		cout<< "Value not found" << endl;
+		return;
+	}
+	//if the node is the last or the first, adjust the last and the first
+	if(node!= last)
+	{
+		(node->nextNode)->previousNode = node->previousNode;
+	}
+	if(node!=first)
+	{
+		(node->previousNode)->nextNode = node->nextNode;
+	}
+    if(node == last)
+    {
+    	last = node->previousNode;
+	}
+	if(node == first)
+	{
+		first = node->nextNode;
+	}
+    delete node;
+}
+
+//Question 7
+//for swap, all i need to do is just swap the values / data in the nodes
+//not swap the nodes themselves
+void DLLStructure ::Sort()
+{
+	Node* current = first;
+	Node* temp = first;
+	//return if list is empty
+	if(first == NULL)
+	{
+		return;
+	}
+	//if it's not empty, go through and increment counter
+	while(current!=NULL)
+	{
+		Node* temp = current;
+		//while temp is not null, compare current data with temp data
+		//switch them if needed
+		while(temp!=NULL)
+		{
+			if((current->data) > (temp->data))
+			{
+				int x = current->data;
+				current->data = temp->data;
+				temp->data = x;	
+			}
+			//increment temp
+			temp = temp -> nextNode;	
+		}
+		//increment current
+		current = current -> nextNode;
+	}
+}
+
+//Question 8
+//if its empty (first is null) return true
+bool DLLStructure ::IsEmpty()
+{
+	if(first == NULL)
+	{
+		return true;
+	}
+	return false;
+}
+
+//Question 9
+//Get methods for the first and last nodes.
+int DLLStructure ::GetHead()
+{
+	return first->data;
+}
+int DLLStructure ::GetTail()
+{
+	return last->data;
+}
+
+
+//Question 10
+//if the getSize is used often, then we can assign each node with an index
+//that way, the head would have index 0, and the tail would have index length-1
+//so all we have to do is retreive the index of the tail
+//a method that returns the size of the list
+int DLLStructure ::GetSize()
+{
+	//initialize the counter to 0
+	int counter=0;
+	Node* current = first;
+	
+	//return 0 if list is empty
+	if(first == NULL)
+	{
+		return 0;
+	}
+	//if it's not empty, go through and increment counter
+	while(current!=NULL)
+	{
+		counter++;
+		current = current -> nextNode;
+	}
+	return counter;
+}
+
+//Question 11
+//the best implementation is to always have the nodes sorted
+//so that the max is always first or last
+//that way when we call getMax, we only return the first or the last node's data
+//Find max
+int DLLStructure ::GetMax()
+{
+	if(first == NULL)
+	{
+		cout <<"it's empty"<< endl;
+		return -999;
+	}
+	int max = first -> data;
+	Node* current = first;
+	//loop through and find the max
+	while(current!=NULL)
+	{
+		if(current->data > max){
+			max = current -> data;
+		}
+		current = current -> nextNode;
+	}
+	return max;
+}
+
+
+//Find min
+int DLLStructure ::GetMin()
+{
+	if(first == NULL)
+	{
+		cout <<"It's empty" <<endl;
+		return -999;
+	}
+	int min = first -> data;
+	Node* current = first;
+	//loop through and find the min
+	while(current!=NULL)
+	{
+		if(current->data < min){
+			min = current -> data;
+		}
+		current = current->nextNode;
+	}
+	return min;
+}
+
+//Question 12
+//the default copy constructor does a member wise copy between objects.
+// We need to define our own copy constructor if an object has pointers.
+//in this case, DLLStructure has 2 pointers, so we need to define our own copy constructor.
+//DLLStructure& 
+DLLStructure::DLLStructure(DLLStructure& dlls)
+{
+//if it's empty
+    if (dlls.first == NULL)
+    {
+        first = NULL;
+		last = NULL;      
+	}
+	//if it's not empty
+    else
+    { 
+    //create first, go through and keep creating new nodes
+        first = new Node(dlls.first->data, NULL, NULL); 
+		Node* temp = first;     // allocate head and copy data
+        Node* temp2 = dlls.first->nextNode;
+        
+        while (temp2 != NULL)
+        {
+            temp->nextNode = new Node( temp2->data, NULL, temp );
+            temp = temp->nextNode;
+            temp2 = temp2->nextNode;
+        }
+        //set the last node to last
+        last = temp;
+    } 	
+}
+
+
+
+
+
+int main()
+{
+	//Node a = Node(6, NULL, NULL);
+//	Node n = Node(5, NULL, &a);
+	//a.nextNode = &n;
+	//cout <<(n.data);
+	//cout <<(n.previousNode->data);
+	int array[5] = {1, 8, 15, 2200, 4};
+	DLLStructure dll(array, 5);
+	dll.Sort();
+	dll.PrintDLL();
+	//DLLStructure dll2(dll);
+	//dll2.PrintDLL();
+	//cout << dll.GetHead();
+	//cout <<dll.GetSize();
+	//cout << (dll.getFirst()->data)<<endl;
+	//dll.Delete(11);
+	//cout << (dll.getFirst()->data)<<endl;
+	//cout << (dll.getFirst()->data)<<endl;
+	//dll.InsertBefore(11, 1);
+	//cout << (dll.getFirst()->data)<<endl;
+	
+	
+	//dll.InsertBefore(7, 26); // To insert 26 before the first occurence of 7
+	//dll.PrintDLL();
+	//cout<<dll.GetMax();
+	//cout<<dll.GetMin();
+	//dll.Delete(22);
+	//cout<<dll.GetSize();
+	//dll.PrintDLL();
+	//cout << dll.IsEmpty();
+	return 0;
+}
