@@ -1,0 +1,90 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class WeatherUtilities{
+  public static void main(String[] args){
+    //input array length using args
+    int n = Integer.parseInt(args[0]);
+    WeatherEntry[] weatherArray = new WeatherEntry[n];
+    
+    //create scanner
+    Scanner input = new Scanner(System.in);
+    
+    double x = 0;
+    boolean y = true;
+    WeatherEntry z = new WeatherEntry(x,y);
+    //loop for filling up the array
+    for(int i=0; i < weatherArray.length; i++){
+      
+      //ask user to input temperature in numbers
+       System.out.println("What is the temperature?[in numbers]");
+       double temp = input.nextDouble();
+       x = temp;
+    
+       //ask user to input if its sunny or not as boolean
+       System.out.println("Is it sunny? [true/false]");
+       boolean sunny = input.nextBoolean();
+       y = sunny;
+       
+       //set weatherEntry(x,y) to be weatherArray[i]
+       z = new WeatherEntry(x,y);
+       weatherArray[i] = z;
+    }
+   //prints how many good days there were
+    int counter = countGoodDays(weatherArray);
+    System.out.println("There were " + counter + " good days.");
+    
+    //loop to print max and min temperatures
+    //set two variables to be the first temperature in the array
+    double maxTemp = weatherArray[0].getTemperatureCelsius();
+    double minTemp = weatherArray[0].getTemperatureCelsius();
+    
+    for(int i =0; i<weatherArray.length; i++){
+      //if a temperature is greater than the max temp, then the max temp becomes this temp.
+      if(maxTemp < weatherArray[i].getTemperatureCelsius()){
+        maxTemp = weatherArray[i].getTemperatureCelsius();
+      }
+      //if a temperature is less than the min temp, then the min temp becomes this temp
+      if(minTemp > weatherArray[i].getTemperatureCelsius()){
+        minTemp = weatherArray[i].getTemperatureCelsius();
+      }
+    }
+    System.out.println("The highest temperature was " + maxTemp + " degrees Celsius and the lowest was " + minTemp +".");
+    
+    
+   
+  }
+  
+  //method 1
+  public static int countGoodDays(double[] tempArray, boolean[] sunniness){
+    //set counter before loop
+    int counter = 0;
+    //if lengths of arrays are not the same, throw exception
+    if (tempArray.length != sunniness.length){
+      throw new IllegalArgumentException("both arrays must have the same length");
+      }
+    else{
+    //its a good day if it's sunny and temp > -30
+    for(int i = 0; i < tempArray.length; i++){
+       if(sunniness[i] == true && tempArray[i] > -30){
+        counter = counter+1;
+      }
+      }
+    }
+    return counter;
+  }
+  
+  //method 2
+  
+  public static int countGoodDays(WeatherEntry array[]){
+    int counter = 0;
+    for(int i =0; i<array.length; i++){
+      //if good weather holds for array[i], then increment the counter
+      if (array[i].isGoodWeather() == true){
+        counter++;
+      }
+    }
+      return counter;
+  }
+
+}
