@@ -1,0 +1,202 @@
+import java.util.Arrays;
+
+public class Assignment2{
+  public static void main(String[] args){
+//IGNORE ALL COMMENTS HERE! THEY WERE MADE FOR ME TO CHECK MY WORK!!!!!    
+//for Question 1
+    //double v = calculateTax(100000.0, 10000.0, 20.0, 20000.0, 30.0, 45000.0, 50.0);
+    //System.out.println(v);
+    
+    //for Question 2
+    //double u = monthlySavings(500, v);
+    //System.out.println(u);
+    
+    //for Question 3
+   //System.out.println(validateCreditCard(1234567812345678L));
+    
+    //for Question 4
+    //System.out.println(Arrays.toString(buildExpenses(750)));
+    
+    //for Question 5
+    //System.out.println(Arrays.toString(monthlyCreditCardPayment(v)));
+    
+    //for Question 6
+     //double [] monthlyExpenses = {100, 200, 300, 400, 500, 600, 700, 800, 900, 10000, 1100, 1200};
+     //double [] monthlyPayments = {1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100};
+     //printBalance(1000.0, 20.0, monthlyExpenses, monthlyPayments);
+    
+    //for Question 7
+    double preTaxIncome = Double.parseDouble (args[0]);
+    double creditCardBalance = Double.parseDouble (args[1]);
+    double interestRate = Double.parseDouble (args[2]);
+    long creditCardNumber = Long.parseLong (args[3]);
+    double monthlyRent = Double.parseDouble (args[4]);
+    
+    double v = calculateTax(preTaxIncome, 10000.0, 20.0, 20000.0, 30.0, 45000.0, 50.0);
+    //System.out.println(v);
+    double postTaxIncome = preTaxIncome - v;
+    double a[] = buildExpenses(monthlyRent);
+    double b[]= monthlyCreditCardPayment(postTaxIncome);
+    
+    
+    validateCreditCard(creditCardNumber);
+    //if card is invalid
+    if (false){
+      System.out.println("Invalid Card.");
+  }
+    else{
+      //if card is valid, print balance, monthly and total savings
+      printBalance(creditCardBalance, interestRate, a, b);
+      double totalSavedPerYear = 0.0;
+      // we need the above line to calculate total saved per year
+      // the loop here is to print monthly savings
+      for (int i = 0; i<12; i++){
+      double monthlySavings = postTaxIncome/12.0 - a[i];
+      System.out.println("Month " + (i+1) + " savings is " + monthlySavings);
+      totalSavedPerYear = monthlySavings + totalSavedPerYear;
+     }
+      //print the total amount saved per year
+      System.out.println("Total amount saved this year is " + totalSavedPerYear);
+       }
+  }
+//for Question 1
+public static double calculateTax(double yearlyIncome, double bracket1Dollars, double bracket1Rate, double bracket2Dollars, double bracket2Rate, double bracket3Dollars, double bracket3Rate){
+  //take into account that the yearly income could be less that bracket1Dollars and in that case no tax is paid
+    if (yearlyIncome < bracket1Dollars){
+      return 0;
+    }
+    else{
+      // if yearly income is less than bracket2dollars, then the tax is the tax rate 1 with the money greater than bracket1dollars
+      if (yearlyIncome < bracket2Dollars){
+        double s = ((yearlyIncome - bracket1Dollars)*bracket1Rate / 100.0);
+        return s;
+      }
+      else{
+        // if yearly income is less than bracket3dollars, then the tax is tax rate 1 between bracket1dollars and bracket2dollars
+        // and tax rate 2 for the money more than the bracket2dollars
+        if (yearlyIncome < bracket3Dollars){
+          double x = ((bracket2Dollars - bracket1Dollars)*bracket1Rate /100.0);
+          double y = ((yearlyIncome - bracket2Dollars)*bracket2Rate / 100.0);
+          return (x+y);
+       }
+       else{
+         // if yearly income is the largest number, then calculate total tax
+         double a = ((bracket2Dollars - bracket1Dollars)*bracket1Rate /100.0);
+         double b = ((bracket3Dollars - bracket2Dollars)*bracket2Rate /100.0);
+         double c = ((yearlyIncome - bracket3Dollars)*bracket3Rate /100.0);
+         return (a+b+c);
+       }
+        }
+     }
+  }
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//for Question 2
+  public static double monthlySavings(double monthlyExpenses, double yearlyIncomePostTax){
+    //change the yearly income from method 1 to monthly income by dividing by 12.
+  
+  double s = ((yearlyIncomePostTax/12.0) - monthlyExpenses);
+  return s;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//for Question 3
+  public static boolean validateCreditCard (long creditCardNumber){
+    //make an array with length 16
+    long [] creditCard = new long[16];
+    //make a loop to take each number from the credit card and assign it a position in an array
+    for (int i = 0; i< creditCard.length; i++){
+      //to seperate the numbers, use modulo 10
+      long a = creditCardNumber%10;
+      //assign the last digit to the last place in the array
+      creditCard[15 - i] = a;
+      //update the new creditcard number without the last digit.
+      creditCardNumber = creditCardNumber/10;  
+    }
+  
+//take the sum of all the odd placed digits from the right
+    long sumOdd = creditCard[15] + creditCard[13] + creditCard[11] + creditCard[9] + creditCard[7] + creditCard[5] + creditCard[3] + creditCard[1];
+    //System.out.println(sumOdd);
+    
+//double the even placed digits from the right, do % 9 then sum those answers.
+    long sumEven = (2*creditCard[14]%9) + (2*creditCard[12]%9) + (2*creditCard[10]%9) + (2*creditCard[8]%9) + (2*creditCard[6]%9) + (2*creditCard[4]%9) + (2*creditCard[2]%9) + (2*creditCard[0]%9);
+    //System.out.println(sumEven);
+    long result = sumOdd + sumEven;
+    //System.out.println(result);
+    if (result%10==0){
+      return true;}
+    else{
+      return false;}
+  }
+    
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //Question 4
+ public static double[] buildExpenses (double monthlyRent){
+   double [] months = new double[12];
+   for (int i = 0; i< months.length; i++){
+     //for months january and june, we add 200 to the rent and 600
+     if (i == 0 || i == 5){
+       months[i] = 600 + 200 + monthlyRent;}
+     //for september we add 300 and 100 to the rent and 600
+     else if (i == 8){
+       months[i] = 600 + 300 + 100+ monthlyRent;}
+     // for april and july we add 100 to the rent and 600
+     else if(i==3 || i==6){
+       months[i] = 600 + 100+ monthlyRent;}
+     //for december we add 200 to the rent and 600
+     else if (i==11){
+       months[i] = 600 + 200+ monthlyRent;}
+     //for the remaining months, we just add the rent and 600
+     else{
+       months[i] = 600+ monthlyRent;}
+   }
+   return months;
+ }
+
+ //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //Question 5
+ public static double[] monthlyCreditCardPayment (double yearlyPostRentIncome){
+   //make an array called credits with length 12
+   double [] credits = new double[12];
+   for (int i = 0; i< credits.length; i++){
+     // 10% of yearlyPostRentIncome / 12 = yearlyPostRentIncome/120
+     // in december add 150 to 10% of the post tax monthly rent
+     if (i== 11){
+       credits[i] = yearlyPostRentIncome/120 +150;}
+     // in september add 200 to the 10% of the post tax monthly rent
+     else if (i == 8){
+       credits[i] = yearlyPostRentIncome/120 +200;}
+     //for the rest of the months just pay 10% of the post tax monthly rent
+     else{
+       credits[i] = yearlyPostRentIncome/120;}
+   }
+   return credits;
+ }
+   
+     
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //Question 6
+ public static void printBalance (double creditCardBalance, double yearlyInterestRate, double[] monthlyExpenses, double[] monthlyPayments){
+   
+   double totalPost = 0;
+   // need to make sure the total before interest rate is credit card balance + expenses - payments +total from previous months
+   for (int i =0; i< 12; i++){
+     double totalPre = totalPost + creditCardBalance + monthlyExpenses[i] - monthlyPayments[i];
+     if (totalPre > 0){
+       //calculate interest rate if totalpre > 0
+       double interest = totalPre*yearlyInterestRate/1200.0;
+       totalPost = interest + totalPre;
+       System.out.println("Month " + (i+1) + " balance " + totalPost);}
+     //dont calculate interest rate if totalpre < 0
+     else{
+       System.out.println("Month " + (i+1) + " balance " + totalPre);}
+   }
+
+ 
+
+
+
+ }
+ }
+
+
+
