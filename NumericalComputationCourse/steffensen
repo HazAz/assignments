@@ -1,0 +1,30 @@
+function root = steffensen( func, x, xtol, ftol, n_max, display)
+
+n = 0;
+fx = feval(func, x);
+
+if abs(fx) <= xtol
+    root = x;
+    return
+end    
+
+if display, 
+   disp('   n             x                    f(x)')
+   disp('------------------------------------------------------')
+   disp(sprintf('%4d %23.15e %23.15e', n, x, fx))
+end
+
+for n = 1:n_max
+    f2 = feval(func, x+fx)-fx; %f2 = f(x + f(x))-f2, the denominator
+    d = fx^2/(f2);%numerator is f(x)^2, not just f(x)
+    x = x - d;
+    fx = feval(func,x);
+    if display, 
+       disp(sprintf('%4d %23.15e %23.15e', n, x, fx)), end
+    if (abs(d) <= xtol || abs(fx) <= ftol)
+        root = x;
+        return
+    end
+end
+end
+
