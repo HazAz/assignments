@@ -1,0 +1,70 @@
+public class WeatherEntry{
+  //has private double temp in celsius
+  private double temperatureInCelsius;
+  //has private boolean is sunny
+  private boolean isSunny;
+  
+  //has public constructor with inputs double and boolean
+  public WeatherEntry(double tempInCelsius, boolean sunny){
+    temperatureInCelsius = tempInCelsius;
+    isSunny = sunny;
+  }
+  
+  //method 1
+  public double getTemperatureCelsius(){
+    return temperatureInCelsius;
+  }
+  
+  //method 2
+  public boolean isGoodWeather(){
+    if(temperatureInCelsius > -30 && isSunny){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  
+  //method 3
+  public void display(boolean isCelsius){
+    if (isCelsius == true){
+      if(isGoodWeather() == true){
+        System.out.println("It is " + getTemperatureCelsius() + " degrees Celsius and it is sunny. It is a good day.");
+      }
+      //if it's false, then either it's not sunny or it's too cold or both
+      //if the temperature is good, then it's not sunny
+      else if(getTemperatureCelsius() > -30){
+        System.out.println("It is " + getTemperatureCelsius() + " degrees Celsius and it is not sunny. It is not a good day.");
+      }
+      //else, then either the temperature is too cold and it's sunny
+      else if(isSunny ==true){
+        System.out.println("It is " + getTemperatureCelsius() + " degrees Celsius and it is sunny. It is not a good day.");
+      }
+      // or it's too cold and its not sunny
+      else{
+        System.out.println("It is " + getTemperatureCelsius() + " degrees Celsius and it is not sunny. It is not a good day.");
+      }
+    }
+      
+     else{
+        double tempInFahr = ((getTemperatureCelsius() - 32) * 5.0/9.0);
+        if(isGoodWeather() == true){
+        System.out.println("It is " + tempInFahr + " degrees Celsius and it is sunny. It is a good day.");
+      }
+      //if it's false, then either it's not sunny or it's too cold
+      //if the temperature is good, then it's not sunny
+      else if(getTemperatureCelsius() > -30){
+        System.out.println("It is " + tempInFahr + " degrees Celsius and it is not sunny. It is not a good day.");
+      }
+      //else, then either the temperature is too cold and it's sunny
+      else if(isSunny ==true){
+        System.out.println("It is " + tempInFahr + " degrees Celsius and it is sunny. It is not a good day.");
+      }
+      //or it's too cold and not sunny
+      else{
+        System.out.println("It is " + tempInFahr + " degrees Celsius and it is not sunny. It is not a good day.");
+      }
+    }
+  
+  }
+}
