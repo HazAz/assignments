@@ -1,0 +1,28 @@
+function S=cubicSpline(x)
+num=1;
+if num==0
+  xs=linspace(-1,1,7);
+%for chebyshev
+elseif num==1
+    for i=0:6
+        xs(i+1)=cos((2*i+1)*pi/(14));
+    end
+    xs=fliplr(xs);
+end
+
+z=findIndex(num);
+n=length(xs);
+for i=1:7
+    y(i)=f(xs(i));
+end
+
+for i=1:n-1
+    if (x-xs(i+1))<=0
+        break;
+    end
+end
+%find h, B, D and S
+h =xs(i+1)-xs(i);
+B =-(h*z(i+1)/6)-(h*z(i)/3) + (y(i+1) - y(i))/h;
+D =(z(i+1)-z(i))/(6*h);
+S= y(i) + (x-xs(i))*(B+(x-xs(i))*(z(i)/2+(x-xs(i))*D));
