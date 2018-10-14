@@ -1,0 +1,20 @@
+function b=leastSquares(num)
+%coord=0 for 7 equally spaced nodes, 1 for chebyshev nodes
+if num==0
+    x=linspace(-1,1,7);
+%for chebyshev
+elseif num==1 
+    for i=0:6
+        x(i+1)=cos((2*i+1)*pi/(14));
+    end
+end
+for i=1:7
+    y(i)=f(x(i));
+end
+a=zeros(7,3);
+for i=1:7
+    a(i,1)=x(i)^0;
+    a(i,2)=(x(i))^2;
+    a(i,3)=(x(i))^4;
+end
+b=a\transpose(y);
