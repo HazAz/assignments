@@ -1,0 +1,51 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<float.h>
+#include<math.h>
+
+/* assuming the numbers are input as arguments */
+int main(int argc, char* argv[]){
+	float total=atof(argv[1]);
+	float n2;
+	int i=0;
+	for(int j=2; j< argc; j++){
+	
+		n2 = atof(argv[j]);
+		/* in case of overflowing */
+		while((total*n2) >= FLT_MAX){
+			i++;
+			total=total/10;
+		}
+		// in case of under flowing
+		while((total*n2) <= FLT_MIN){
+			i--;
+			total=total*10;
+		}
+		
+		//to write in scientific notation
+		while((total*n2) <1){
+			if(total <= FLT_MAX/10){
+				total = (total*10);
+			}
+			else{
+				n2 = (n2*10);
+			}
+			i--;
+		}
+	
+		while((total*n2) > 9){
+			if(total >= FLT_MIN*10){
+				total = (total/10);
+			}
+			else{
+				n2 = (n2/10);
+			}
+			i++;
+		}
+		total = total*n2;
+	}
+	
+	//printing it
+	printf("%f times 10 to the power of %d \n", total, i);
+	return 0;
+}
