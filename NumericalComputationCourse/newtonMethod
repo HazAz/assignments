@@ -1,0 +1,21 @@
+function a=newtonMethod(num)
+if num==0;
+  x=linspace(-1,1,7);
+%for chebyshev
+elseif num==1 
+    for i=0:6
+        x(i+1)=cos((2*i+1)*pi/(14));
+    end
+end
+#loop from 1 to 7, find y's
+for i=1:7
+    y(i)=f(x(i));
+end
+for j=1:6
+    a(j)=y(j);
+    #loop again and solve for new y's
+    for i=j+1:7
+        y(i)=(y(i)-y(j))/(x(i)-x(j));
+    end
+end
+a(7)=y(7);
