@@ -1,0 +1,36 @@
+function x = genp(A,b)
+% genp.m    Gauss elimination with no pivoting
+% 
+% input:  A is an n x n nonsingular matrix
+%         b is an n x 1 vector
+% output: x is the solution of Ax=b.
+%
+%A is nxn matrix, so that's n^2 memory
+%b is nx1 matrix, so that's an n memory
+n = length(b); %1 memory
+
+midpoint = (n+1)/2; %2 flops, 1 memory
+
+
+for k = 1:n  %multiply all flops after this by n-1, 1 memory (k)
+   if k==midpoint %dont do anything if we're at the middle of the matrix
+       continue;
+   else
+        mult = A(n-k+1,k)/A(k,k); %3 flops, 1 memory
+        A(n-k+1,k) = A(n-k+1,k) - A(k,k)*mult; %changing half of the matrix. 6 flops
+        A(n-k+1, n-k+1) = A(n-k+1, n-k+1) - A(k, n-k+1)*mult; %changing other half of the matrix. 12 flops
+        b(n-k+1) = b(n-k+1) - b(k)*mult; %editing b. 6 flops
+   end
+end
+%disp(A)
+%disp(b)
+
+%backtrack
+x = zeros(n,1); %n memories
+for k = 1:n %multiply next flops by n-1
+  x(k) = b(k)/A(k,k); %1 flop
+end
+
+%total flops = 2 + (n-1)(3+6+12+6) + (n-1)(1)
+% = 2 + 27n - 27 + n - 1 = 28n -26
+%total memory = n^2 + n + n + 4 = n^2 + 2n + 4
