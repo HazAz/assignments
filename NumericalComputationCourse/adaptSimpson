@@ -1,0 +1,27 @@
+function sol = adapt_simpson(a,b,ep,level, level_max, counter)
+  %following the algorithm in class exactly
+  %here we have a counter that we increment every time
+  %f() is called, so we can know how many computations were needed
+h = b-a;
+c = (a+b)/2;
+I1=h*(f(a)+4*f(c)+f(b))/6;
+counter = counter + 3;
+level = level + 1;
+d=(a+c)/2;
+e=(c+b)/2;
+I2 = h*(f(a)+4*f(d)+2*f(c)+4*f(e)+f(b))/12;
+counter = counter + 5;
+if level >= level_max
+    numI = I2;
+    sol = [numI, counter];
+else
+    if abs(I2-I1) <= 15*ep
+        numI = I2+(1/15)*(I2-I1);
+        sol = [numI, counter];
+    else
+        
+       sol = adapt_simpson(a,c,ep/2,level, level_max, counter) + adapt_simpson(c,b,ep/2,level, level_max, counter);
+    end
+end
+end
+  
