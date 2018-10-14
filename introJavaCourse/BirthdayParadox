@@ -1,0 +1,132 @@
+import java.util.Arrays;
+public class BirthdayParadox{
+  public static void main (String[] args){
+    //for part 1
+    //System.out.println(Arrays.toString(generateArray(2, 99)));
+    
+    //for part 2
+    //int[][] x = new int[1][1];
+    //x = generateAllData(7, 8, 365);
+    //System.out.println(Arrays.deepToString(x));
+    
+    //for part 3
+    //System.out.println(countElement(x, 5));
+    
+    //for part 4
+    //System.out.println(maxDay(x));
+    
+    //for part 5
+    //int[] y = {1, 2, 3, 4, 5, 6, 7, 5};
+    //System.out.println(hasDuplicates(y));
+    
+    //for part 6
+    //System.out.println(runExperiment(5));
+    
+    //for part 7
+    double x = 0.0;
+    for (int i = 1; i <= 100; i++){
+      x = runExperiment(i);
+      System.out.println(x);
+    }
+    
+    
+  }
+ // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //for part 1
+  public static int[] generateArray(int size, int range){
+    int [] array = new int [size];
+    for( int i = 0; i < array.length; i++){
+      array[i] = (int) (Math.random()*(range - 1));
+    }
+    return array;
+  }
+  
+  
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //for part 2
+  public static int[][] generateAllData(int iterations, int size, int range){
+    int[][] arr = new int[iterations][size];
+    for(int i = 0; i < iterations;i++) {
+      arr[i] = generateArray(size, range);
+    }
+    return arr;  
+  }
+  
+  
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //for part 3
+  public static int countElement(int[][] arr, int element){
+    int counter = 0;
+    for(int i = 0; i<arr.length; i++){
+      for (int j = 0; j < arr[i].length; j++){
+      if (element == arr[i][j]){
+        counter = counter + 1;
+      }
+     }
+    }
+    return counter;
+  }
+    
+  
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //for part 4
+  public static int maxDay(int[][] array){
+    int counter = 0;
+    int x = 0;
+    int y = 0;
+    for(int i = 0; i< array.length; i++){
+      for(int j = 0; j<array[i].length; j++){
+        x = countElement(array, array[i][j]);
+        //System.out.print(x);
+        if(x > counter){
+          counter = x;
+          y = array[i][j];
+        }
+      }
+    }
+    //System.out.println(" ");
+    //System.out.println(y);
+    return y;
+    
+  }
+  
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //for part 5
+  public static boolean hasDuplicates(int[] x){
+    int[][] multiArray = {x};
+    int y = 0;
+    int counter = 0;
+    y = maxDay(multiArray);
+    counter = countElement(multiArray, y);
+    if(counter > 1){
+      return true;
+    }
+    return false;
+    
+    
+  }
+  
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //for part 6
+  public static double runExperiment(int size){
+    //iterations = 200, range = 365
+    int[][] x = new int[1][1];
+    if (size < 1){
+      throw new IllegalArgumentException("The number inputed should be >= 1");
+    }
+    else{
+      x = generateAllData(200, size, 365);
+      //System.out.println(Arrays.deepToString(x));
+      double fraction = 0;
+      for(int i = 0; i< x.length; i++){
+          if(hasDuplicates (x[i]) ==true){
+            fraction = fraction + (1.0/200.0);
+        }
+             
+ 
+      }
+  
+  return fraction;
+    }
+  }
+}
