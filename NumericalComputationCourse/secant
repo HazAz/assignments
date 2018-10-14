@@ -1,0 +1,29 @@
+function root = secant(func, xi, xf, xtol, ftol, nmax, display)
+%divdif is the divided difference.
+%this is a copy of whats in the lecture notes.
+n=1;
+fxf = feval(func, xf);
+if display, 
+   disp('   n             xf                    f(x)')
+   disp('------------------------------------------------------')
+   disp(sprintf('%4d %23.15e %23.15e', n, xf, fxf))
+end
+for n = 1:nmax
+     
+     fxi = feval(func, xi);
+     fxf = feval(func, xf);
+     
+    divdif= ((xf-xi)/(fxf-fxi))*fxf ;
+    
+    xi = xf;
+    fxi = feval(func,xf);
+    xf = xf - divdif;
+    fxf = feval(func, xf);
+    if display, 
+       disp(sprintf('%4d %23.15e %23.15e', n, xf, fxf)), end
+    if (abs(divdif) <= xtol || abs(fxf) <= ftol)
+        root = xf;
+        return
+    end
+end
+root = xf;
