@@ -1,0 +1,41 @@
+function x = gepp(A,b)
+% genp.m    Gauss elimination with partial pivoting
+% 
+% input:  A is an n x n nonsingular matrix
+%         b is an n x 1 vector
+% output: x is the solution of Ax=b.
+%
+n = length(b);%1 memory
+
+midpoint = (n+1)/2; % 2 flops 1 memory
+ 
+for k = 1:n  %1 memory
+   [maxval, maxindex] = max(abs(A(k:n,k)));
+   if maxval == 0, error('A is singular'), end
+   
+   q = maxindex+k-1; %2 flops
+   A([k,q],k:n) = A([q,k],k:n);
+   b([k,q]) = b([q,k]);
+   
+  
+   if k==midpoint %dont do anything if we're in the center of the matrix
+       continue;
+   else
+        mult = A(n-k+1,k)/A(k,k); %3 flops 
+        A(n-k+1,k) = A(n-k+1,k) - A(k,k)*mult; %chaning half of the matrix. 6 flops
+        A(n-k+1, n-k+1) = A(n-k+1, n-k+1) - A(k, n-k+1)*mult; %changing other half of the matrix. 12 flops
+        b(n-k+1) = b(n-k+1) - b(k)*mult; %editing b. 6 flops
+   end 
+end
+%disp(A)
+%disp(b)
+
+%backtracking
+x = zeros(n,1);
+for k = 1:n 
+  x(k) = b(k)/A(k,k); %1 flop
+end
+
+%flops = 2 + (n-1)(2 + 3 + 6 + 12 + 6) + (n-1)(1)
+%= 2 + 29n - 29 + n - 1 = 30n - 28
+%memory = n^2 + n + n + 4 = n^2 + 2n + 4
